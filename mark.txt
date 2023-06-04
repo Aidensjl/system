@@ -1,2 +1,5 @@
-system
+相机标定：
+
+1.棋盘格的生成：generatePattern.py
+2.标定矫正：jiaozheng2.py
 
