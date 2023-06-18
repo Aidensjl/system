@@ -1,0 +1,88 @@
+cmake_minimum_required(VERSION 2.8)
+project(Practice)
+# 使用find_package(xxx REQUIRED),会返回${xxx_INCLUDE_DIRS} ${xxx_LIBRARIES}，xxx与xxxConfig,cmake文件中的设置一致
+# 和include_directories(${xxx_INCLUDE_DIR})
+# 和add_executable(main src文件)
+# 和target_link_libraries(main ${xxx_LIBRARIES}) 
+# 四者一起使用
+
+find_package(Eigen3 REQUIRED)
+if(Eigen3_FOUND)
+  message(STATUS "Eigen3 found")
+  message(STATUS "Eigen3 version: ${Eigen3_VERSION}")
+  message(STATUS "Eigen3 include directory: ${EIGEN3_INCLUDE_DIRS}")
+else()
+  message(FATAL_ERROR "Eigen3 not found")
+endif()
+
+
+
+find_package(Pangolin REQUIRED)
+if(Pangolin_FOUND)
+  message(STATUS "Pangolin found")
+  message(STATUS "Pangolin version: ${Pangolin_VERSION}")
+  message(STATUS "Pangolin include directory: ${Pangolin_INCLUDE_DIRS}")
+  message(STATUS "Pangolin library directory: ${Pangolin_LIBRARIES}")
+else()
+  message(FATAL_ERROR "Pangolin not found")
+endif() 
+
+
+# sophus和fmt特殊 不会返回${xxx_INCLUDE_DIRS} ${xxx_LIBRARIES}，采用直接在target_link_libraries链接
+find_package(Sophus REQUIRED)
+if(Sophus_FOUND)
+  message(STATUS "Sophus found")
+  message(STATUS "Sophus version: ${Sophus_VERSION}")
+  set(Sophus_LIBRARIES Sophus::Sophus)
+else()
+  message(FATAL_ERROR "Sophus not found")
+endif()
+
+
+find_package(OpenCV)
+if(Sophus_FOUND)
+  message(STATUS "OpenCV found")
+  message(STATUS "OpenCV version: ${OpenCV_VERSION}")
+  # message(STATUS "OpenCV include directory: ${OpenCV_INCLUDE_DIRS}")
+  # message(STATUS "OpenCV library directory: ${OpenCV_LIBRARIES}")
+  # message(STATUS "OpenCV library directory: ${OpenCV_LIBS}")
+
+  else()
+  message(FATAL_ERROR "OpenCV not found")
+endif()
+
+
+# 包含头文件
+include_directories(${CMAKE_SOURCE_DIR}/include 
+                    # "/usr/include/eigen3"
+                    # "/usr/local/Sophus/include"
+                    ${Eigen3_INCLUDE_DIRS}
+                    ${Pangolin_INCLUDE_DIRS}
+                    ${OpenCV_INCLUDE_DIRS}
+                    )
+
+
+
+
+
+file(GLOB ALL_SOURCE "*.cpp")
+# 可执行文件
+add_executable(main ${ALL_SOURCE})
+message(STATUS "directory: ${CMAKE_SOURCE_DIR}/include")
+
+
+
+
+
+
+# target_include_directories(main PRIVATE ${Sophus_INCLUDE_DIRS})
+# 可执行文件需要链接的库文件（.a 或者 .so）
+# 也可以是Sophus::Sophus，如果xxxconfig.cmake 中不返回上诉两个变量，可以在xxxtarget.cmake找Create imported target yyy::yyy
+# target_link_libraries(main ${Pangolin_LIBRARIES} Sophus::Sophus)
+# target_link_libraries(main ${Pangolin_LIBRARIES} fmt::fmt)
+target_link_libraries(main ${Pangolin_LIBRARIES} 
+                           ${Sophus_LIBRARIES}
+                           ${OpenCV_LIBRARIES})
+
+
+ 
