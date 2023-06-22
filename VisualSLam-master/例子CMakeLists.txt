@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(Practice)
 # 使用find_package(xxx REQUIRED),会返回${xxx_INCLUDE_DIRS} ${xxx_LIBRARIES}，xxx与xxxConfig,cmake文件中的设置一致
+(可以不用将${xxx_INCLUDE_DIRS}放入include_directories(),在使用find_package()会自动包含，除非是自己写的，所以只需要target_link_libraries())
+(因为有些${xxx_INCLUDE_DIRS}没有返回值)
 # 和include_directories(${xxx_INCLUDE_DIR})
 # 和add_executable(main src文件)
 # 和target_link_libraries(main ${xxx_LIBRARIES}) 
